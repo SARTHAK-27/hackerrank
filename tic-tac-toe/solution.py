@@ -1,15 +1,6 @@
 #!/bin/python
 import random
 
-TEST = False
-RAND = False
-OUTPUT = False
-
-# from sys import argv
-# if 'test' in argv[1:]: TEST = True
-# if 'random' in argv[1:]: RAND = True
-# if 'output' in argv[1:]: OUTPUT = True
-
 # ------------------------------------------------------------------------------
 # Constants
 # ------------------------------------------------------------------------------
@@ -223,7 +214,6 @@ def analize_pattern(pattern, p, b):
 # 0. Check for best first move
 def first_move(p, b):
     if p == X and b == EMPTY:
-        # if RAND: return random_play(p, b)
         random.shuffle(CORNERS)
         return CORNERS[0]
     return False
@@ -413,85 +403,20 @@ def nextMove(player, board):
         or check_direct_plays(p, b)
         or fork(p, b)
         or block_fork(p, b)
-        # or force_defend(p, b)
         or center(p, b)
         or opposite_corner(p, b)
         or empty_corner(p, b)
         or empty_side(p, b)
         or random_play(p, b)
     )
-    # if TEST: return '%d %d' % move
     print '%d %d' % move
-     
 
-# ------------------------------------------------------------------------------
-# Auto play
-# ------------------------------------------------------------------------------
-
-# def check_winner(b):
-#     all_rows = b + _rotate(b) + _get_diagonals(b)
-#     for p in [X, O]:
-#         for row in all_rows:
-#             if row.count(p) == 3: return p
-#     return False
-
-
-# def place_move(p, b, m):
-#     m = m.split(' ')
-#     top = int(m[0])
-#     left = int(m[1])
-#     b[top][left] = p
-
-
-# def print_board(b):
-#     print '\n'.join(_stringBoard(b))
-
-
-# def match():
-#     board = [
-#         [_,_,_],
-#         [_,_,_],
-#         [_,_,_],
-#     ]
-#     player = X
-
-#     for i in range(0, 9):
-#         if 'debug' in argv[1:]:
-#             print_board(board)
-
-#         move = nextMove(STRINGS[player], _stringBoard(board))
-#         place_move(player, board, move)
-#         winner = check_winner(board)
-#         if winner:
-#             print 'Player %s Won' % STRINGS[player]
-#             print '====================================='
-#             print_board(board)
-#             print '====================================='
-#             return winner
-#         player = OPPONENTS[player]
-
-#     if OUTPUT:
-#         print 'Tie Game'
-#         print '====================================='
-#         print_board(board)
-#         print '====================================='
-
-
-# if TEST:
-#     for i in range(0, 10000):
-#         winner = match()
-#         if winner: break
 
 # ------------------------------------------------------------------------------
 # Test
 # ------------------------------------------------------------------------------
 
-# if not TEST:
-#If player is X, I'm the first player.
-#If player is O, I'm the second player.
 player = raw_input()
-
-#Read the board now. The board is a 3x3 array filled with X, O or _.
 board = []
 for i in xrange(0, 3):
     board.append(raw_input())

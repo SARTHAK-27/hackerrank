@@ -145,7 +145,6 @@ def square(board, y, x, p):
     safe = []
     score = 0
     total = 0
-    print 'square:', coord
     for size in range(2, BOARD_SIZE + 1): # All square sizes
         length = size - 1
         dy = y + length
@@ -175,7 +174,6 @@ def square(board, y, x, p):
                     output(p='Z', board=None, moves=[ax, bx, cx, dx])
             
             if b == c == d == p: # Losing move
-                # print 'bad: ', (y,x)
                 testing[(y,x)] = -1
                 return -1
             
@@ -227,25 +225,6 @@ def get_scores(target, board):
         if not scored.get(score): scored[score] = []
         if pos not in scored[score]: scored[score].append(pos)
 
-    # for score, moves in scored.items():
-    #     for pos in moves:
-    #         y, x = pos
-    #         if x == 0 or x == 8 or y == 0 or y == 8:
-    #             ns = 1
-    #             if not scored.get(ns): scored[ns] = []
-    #             if pos not in scored[ns]: scored[ns].append(pos)
-
-    # if not len(empty) == len(testing.keys()):
-    #     print len(empty), len(testing.keys())
-    #     import pdb; pdb.set_trace()
-
-    # if 1:#len(empty) == 81:
-    #     b2 = create_board()
-    #     for k, v in testing.items():
-    #         y, x = k
-    #         b2[y][x] = str(v)
-    #     output(board=b2)
-
     # Remove bad elements
     for pos in bad:
         for score, moves in scored.items():
@@ -294,22 +273,9 @@ def play(p, board):
     o_total = unique(o_total)
 
     both = intersect(o_total, p_total)
-
-    # print len(p_total) - len(both)
-
-    # if not p_scores.get(2): p_scores[2] = []
-    # p_scores[2] += p_safe
-
     p_min = min(p_scores.keys()) if p_scores else -1 # Lowest player score
     o_min = min(o_scores.keys()) if o_scores else -1 # Lowest opponent score
     good = []
-    # keys = o_scores.keys() # Scored array
-    # keys.sort() # Sort by lowest score
-    # for score in keys: # Get lowest scored move from opponent if shared 
-    #     for move in o_scores[score]:
-    #         if move in p_total: good.append(move) # Shared move
-    #     if good: break # Stop at the first set of scored moves found
-
     pos = mirror(p=p, board=board)
     if pos:
         y, x = pos
@@ -328,27 +294,13 @@ def play(p, board):
     if p == B:
         if board[4][4] == o:
             good = []
-    #         # import pdb; pdb.set_trace()
-    #         if player_turn == 0: 
-    #             if (0,4) in opn: return (0,4)
-    #             if (8,4) in opn: return (0,4)
-    #         if player_turn == 1:
-    #             if (2,6) in opn: return (2,6)
-    #             if (2,2) in opn: return (2,2)
-    #         if player_turn == 2:
-    #             if (2,2) in opn: return (2,2)
-    #             if (2,6) in opn: return (2,6)
 
     if not good:
         if p_min == o_min and p_scores:
             good = intersect(p_scores[p_min], o_scores[o_min])
-            # print len(p_scores[p_min]) - len(good)
 
 
     if not good and p_scores: good = p_scores[p_min] # Use best player moves if none shared
-    # if not good: 
-    #     import pdb; pdb.set_trace()
-    #     print 'going to lose'
     if not good: good = opn # Going to lose, make a valid play anyways
     
     if p == R and turn == 0:
@@ -358,41 +310,6 @@ def play(p, board):
     # 2) p1 always wins against p2 in same order
     first = good[0]
     last = good[len(good) - 1]
-
-
-
-    # # if p == B: 
-    # #     return first
-    # #     return last
-
-    # global gof
-    # global gob
-
-    # if turn == 0 and p == R:
-    #     return (0, 0) # Good at all
-    #     return (4, 3) # Good forwards
-    #     return (4, 1) # Good at random
-    #     return last
-    #     return first if p == R else last
-    # elif turn < 5:
-    #     o_moves = len(matches(target=o, board=board))
-    #     row = in_row(p=o, board=board, y=0)
-    #     forwards = o_moves == row
-    #     row2 = in_row(p=o, board=board, y=8)
-    #     backwards = o_moves == row2
-
-    #     # Cache determinations
-    #     gof[p] = forwards
-    #     gob[p] = backwards
-    #     if forwards: return first if p == R else last
-    #     if backwards: return last if p == R else first
-    # else:
-    #     if gof[p]: return first if p == R else last
-    #     if gob[p]: return last if p == R else first
-
-    # if p == R:
-    #     return first
-    #     return last
     return good[random.randint(0, len(good)-1)] # Random move from the list
 
 
